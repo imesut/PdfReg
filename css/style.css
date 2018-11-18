@@ -1,0 +1,44 @@
+.draggable {
+    width: 100px;
+    height: 100px;
+    background-color: #000;
+    opacity: .4;
+    color: #fff;
+    font-size: 25px;
+    padding: 1px;
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+    z-index: 1;
+}
+
+.page {
+    z-index: -1;
+}
+
+#pdfcontainer {
+    border: 1px solid;
+}
+
+#holder {
+    position: relative;
+    height: auto;
+}
+
+#pdfcontainer,
+#rectanglecontainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+#rectanglecontainer {
+    z-index: 10;
+    height: 100%;
+}
+
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
