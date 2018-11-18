@@ -1,5 +1,7 @@
 function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
-    var page = $("#viewer > div:nth-child(" + pageNumber + ") > div.textLayer")
+    var page = $("#page-" + pageNumber + " > div")[0];
+
+    console.log(page);
 
     var textInRect = "";
 
