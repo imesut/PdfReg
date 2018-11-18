@@ -1,3 +1,27 @@
+function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
+    
+    // get the page
+    var page = $("#page-" + pageNumber + " > div")[0];
+
+    var textInRect = "";
+
+    for (j = 0; j < page.childNodes.length; j++) {
+        // get text parts
+        var textPart = page.childNodes[j];
+
+        // if text parts are between the rectangle borders
+        if (textPart.style.left != "" & textPart.style.top != "") {
+            textPartX = parseFloat(textPart.style.left.slice(0, -2));
+            textPartY = parseFloat(textPart.style.top.slice(0, -2));
+            if (textPartX > Xi & textPartX < Xl & textPartY > Yi & textPartY < Yl) {
+                textInRect = textInRect + textPart.textContent;
+            }
+        }
+    }
+    return textInRect;
+}
+
+
 function getAllText() {
     allText = "";
     // for each rectangle
@@ -45,28 +69,9 @@ function getAllText() {
             throw "Rectangle doens't ends at the same page."
         };
     }
-    console.log(allText);
-}
-
-function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
-    
-    // get the page
-    var page = $("#page-" + pageNumber + " > div")[0];
-
-    var textInRect = "";
-
-    for (j = 0; j < page.childNodes.length; j++) {
-        // get text parts
-        var textPart = page.childNodes[j];
-
-        // if text parts are between the rectangle borders
-        if (textPart.style.left != "" & textPart.style.top != "") {
-            textPartX = parseFloat(textPart.style.left.slice(0, -2));
-            textPartY = parseFloat(textPart.style.top.slice(0, -2));
-            if (textPartX > Xi & textPartX < Xl & textPartY > Yi & textPartY < Yl) {
-                textInRect = textInRect + textPart.textContent;
-            }
-        }
-    }
-    return textInRect;
+    var link = document.createElement('a');
+    mimeType = 'text/plain';
+    link.setAttribute('download', "output.txt");
+    link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(allText));
+    link.click();
 }
