@@ -1,63 +1,75 @@
 PDFJS = pdfjsLib;
 
-pdfjsLib.getDocument('sample.pdf').then(
-    function (pdf) {
-        var container = document.getElementById("pdfcontainer");
-        var height = 0;
+function loadSelected() {
+    var filename;
+    if (document.querySelector('input[type=file]').files.length == 0) {
+        filename = "sample.pdf";
+    } else {
+        filename = document.querySelector('input[type=file]').files[0].name;
+    }
+    loadPDF(filename);
+}
 
-        for (var i = 1; i <= pdf.numPages; i++) {
+function loadPDF(filename) {
+    pdfjsLib.getDocument(filename).then(
+        function (pdf) {
+            var container = document.getElementById("pdfcontainer");
+            var height = 0;
 
-            pdf.getPage(i).then(
-                function (page) {
-                    var scale = 1;
-                    var viewport = page.getViewport(scale);
-                    var div = document.createElement("div");
+            for (var i = 1; i <= pdf.numPages; i++) {
 
-                    div.setAttribute("id", "page-" + (page.pageIndex + 1));
-                    div.setAttribute("class", "page");
-                    var pageHeight = page.view[3]
-                    div.setAttribute("height", pageHeight);
-                    div.setAttribute("style", "position: relative");
-                    container.appendChild(div);
+                pdf.getPage(i).then(
+                    function (page) {
+                        var scale = 1;
+                        var viewport = page.getViewport(scale);
+                        var div = document.createElement("div");
 
-                    var canvas = document.createElement("canvas");
-                    div.appendChild(canvas);
+                        div.setAttribute("id", "page-" + (page.pageIndex + 1));
+                        div.setAttribute("class", "page");
+                        var pageHeight = page.view[3]
+                        div.setAttribute("height", pageHeight);
+                        div.setAttribute("style", "position: relative");
+                        container.appendChild(div);
 
-                    var context = canvas.getContext('2d');
+                        var canvas = document.createElement("canvas");
+                        div.appendChild(canvas);
 
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                        var context = canvas.getContext('2d');
 
-                    var renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
 
-                    height = height + pageHeight;
-                    // Set main holder height as total height of pages
-                    $("#holder")[0].style.height = height + "px";
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+
+                        height = height + pageHeight;
+                        // Set main holder height as total height of pages
+                        $("#holder")[0].style.height = height + "px";
 
 
-                    page.render(renderContext).then(function () {
-                        return page.getTextContent();
-                    }).then(
-                        function (textContent) {
-                            var textLayerDiv = document.createElement("div");
-                            textLayerDiv.setAttribute("class", "textLayer");
-                            div.appendChild(textLayerDiv);
+                        page.render(renderContext).then(function () {
+                            return page.getTextContent();
+                        }).then(
+                            function (textContent) {
+                                var textLayerDiv = document.createElement("div");
+                                textLayerDiv.setAttribute("class", "textLayer");
+                                div.appendChild(textLayerDiv);
 
-                            var textLayer = new TextLayerBuilder({
-                                textLayerDiv: textLayerDiv,
-                                pageIndex: page.pageIndex,
-                                viewport: viewport
+                                var textLayer = new TextLayerBuilder({
+                                    textLayerDiv: textLayerDiv,
+                                    pageIndex: page.pageIndex,
+                                    viewport: viewport
+                                });
+
+                                textLayer.setTextContent(textContent);
+                                textLayer.render();
                             });
 
-                            textLayer.setTextContent(textContent);
-                            textLayer.render();
-                        });
+                    });
 
-                });
+            };
 
-        };
-
-    });
+        });
+}
