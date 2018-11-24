@@ -5,17 +5,17 @@
     <title>PDF Text Retrieve</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" initial-scale=1">
-    
+
     <!-- Bootstrap, Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="vendor/css/bootstrap.css" rel="stylesheet">
     <script src="vendor/js/bootstrap.min.js"></script>
-    
+
     <!-- PDF.JS -->
     <script src="vendor/js/pdf.js"></script>
     <script type="text/javascript" src="vendor/js/text_layer_builder.js"></script>
     <link type="text/css" href="vendor/css/text_layer_builder.css" rel="stylesheet">
-  
+
     <!-- Draggable Rectangles -->
     <script src="vendor/js/interact.1.3.4.js"></script>
     <script src="vendor/js/modernizr.js"></script>
@@ -23,46 +23,100 @@
     <script src="js/interactIndex.js"></script>
 
     <!-- App Scripts and Styles -->
-    <script type="text/javascript" src="js/textRetriever.js"></script>
+    <script type="text/javascript" src="js/textRetrieve.js"></script>
     <script type="text/javascript" src="js/rectangle.js"></script>
+    <script type="text/javascript" src="js/interactions.js"></script>
     <link type="text/css" href="css/style.css" rel="stylesheet">
 
 </head>
 
 <body>
+
     <div class="container" style="margin:20px">
-        <div class="col-md-9 col-sm-10">
+        <!-- <div class="col-md-9 col-sm-10"> -->
+        <div style="float:left;">
             <h2>PDF</h2>
-            <div id="holder">
+            <div id="holder" style="width: 500px;">
                 <div id="pdfcontainer"></div>
+                <div class="mouseBox"></div>
                 <div id="rectanglecontainer">
-                    <div id="drag-1" class="draggable" style="width: 100px; height:100px;">
-                        <p class="overlay">1</p>
+                    <div id="fileSelectArea">
+                        <input class="form-control" type="file" id="fileSelect">
+                        <br>
+                        <a onclick="loadSelected()" class="btn btn-default" id="pdfFile">Open PDF</a>
+                        <br>
+                    </div>
+                    <div id="drag-0" class="draggable" style="width: 0px; height:0px;" data-x="0" data-y="0">
+                        <p class="overlay" style="display: none">0</p>
                     </div>
                 </div>
             </div>
 
         </div>
         <div class="col-md-3 col-sm-2 sticky">
+            <!-- <div class="sticky" style="float:left"> -->
             <h2>Settings</h2>
-            PDF (Open Only pdf at the same folder): <input class="form-control" type="file" id="fileSelect"> <br>
-            <a onclick="loadSelected()" class="btn btn-default" id="pdfFile">Open PDF</a>
-            <br>
-            Zoom: <button class="btn btn-default" id="plus">+</button><button class="btn btn-default" id="minus">-</button>
-            <br><br>
+            <div id="onPageAlert" class="alert alert-info alert-dismissible fade in" style="margin-bottom: 0; display:none">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Alert
+            </div>
             <a onclick="addRectangle()" class="btn btn-default" id="addRectBtn">Add Rectangle</a>
             <br><br>
-            <a onclick="getAllText()" class="btn btn-default" id="getAllTextBtn">Get All Text</a>
+            <a onclick="try {getAllText()} catch(err){showInfo(err, 'danger')}" class="btn btn-default" id="getAllTextBtn">Get
+                All Text</a>
             <br><br>
             <a></a>
 
         </div>
     </div>
 
-    <script src="js/pdfinitiator.js"></script>
+    <script src="js/pdfInit.js"></script>
     <script type="text/javascript">
         pdfjsLib.workerSrc = "vendor/js/pdf.worker.js";
     </script>
 
+    <script>
+        var nRX = 0; // New Rectange's X begin
+        var nRY = 0; // New Rectange's Y begin
+        var nRH = 0; // New Rectange's H - Height
+        var nRW = 0; // New Rectange's W - Width
+        mouseBoxStyle = $(".mouseBox")[0].style;
+        isDragging = false;
+
+        $("#holder").mousedown(
+                function (event) {
+                    if (event.target.className != "draggable") {
+                        isDragging = true;
+                        nRX = parseFloat(event.offsetX);
+                        nRY = parseFloat(event.offsetY);
+                        mouseBoxStyle.display = "block";
+                        mouseBoxStyle.left = nRX + "px";
+                        mouseBoxStyle.top = nRY + "px";
+                    }
+                }
+            )
+            .mousemove(function (event) {
+                if (event.target.className != "draggable" && isDragging) {
+                    mouseBoxStyle.width = (event.offsetX - nRX) + "px";
+                    mouseBoxStyle.height = (event.offsetY - nRY) + "px";
+                }
+            })
+            .mouseup(
+                function (event) {
+                    if (event.target.className != "draggable") {
+                        isDragging = false;
+                        mouseBoxStyle.display = "none";
+                        mouseBoxStyle.width = mouseBoxStyle.height = 0;
+                        nRW = parseFloat(event.offsetX - nRX);
+                        nRH = parseFloat(event.offsetY - nRY);
+                        //console.log(nRX + "-" + nRY + "-" + nRW + "-" + nRH);
+                        if (nRW > 0 & nRH > 0) addRectangle(nRX, nRY, nRW, nRH);
+                        nRX = nRY = nRH = nRW = 0;
+                    }
+                }
+            );
+    </script>
+
 </body>
+
 </html>

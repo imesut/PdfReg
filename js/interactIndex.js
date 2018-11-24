@@ -15,19 +15,8 @@ interact('.draggable')
         },
         // enable autoScroll
         autoScroll: true,
-
-        // call this function on every dragmove event
         onmove: dragMoveListener,
-        // call this function on every dragend event
-        /* onend: function (event) {
-            var textEl = event.target.querySelector('p');
 
-            textEl && (textEl.textContent =
-                'm' +
-                (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
-                    Math.pow(event.pageY - event.y0, 2) | 0))
-                .toFixed(2) + 'px');
-        } */
     })
     .resizable({
         // resize from all edges and corners
@@ -54,7 +43,7 @@ interact('.draggable')
         inertia: true,
     })
     .on('resizemove', function (event) {
-        var target = event.target,
+        var target = event.target, 
             x = (parseFloat(target.getAttribute('data-x')) || 0),
             y = (parseFloat(target.getAttribute('data-y')) || 0);
 
@@ -66,9 +55,7 @@ interact('.draggable')
         x += event.deltaRect.left;
         y += event.deltaRect.top;
 
-        target.style.webkitTransform = target.style.transform =
-            'translate(' + x + 'px,' + y + 'px)';
-
+        target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
         //target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
@@ -81,9 +68,7 @@ function dragMoveListener(event) {
         y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
     // translate the element
-    target.style.webkitTransform =
-        target.style.transform =
-        'translate(' + x + 'px, ' + y + 'px)';
+    target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
 
     // update the posiion attributes
     target.setAttribute('data-x', x);

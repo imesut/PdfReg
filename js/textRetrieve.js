@@ -1,5 +1,5 @@
 function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
-    
+
     // get the page
     var page = $("#page-" + pageNumber + " > div")[0];
 
@@ -64,14 +64,17 @@ function getAllText() {
 
             // retrieve parameteres defined
             var textInRect = getTextInRect(pageNumber, Xi, _Yi, Xl, _Yl);
+
             allText = allText + " " + textInRect;
         } else { // error case
-            throw "Rectangle doens't ends at the same page."
+            throw "Rectangle doesn't ends at the same page."
         };
     }
+
     var link = document.createElement('a');
     mimeType = 'text/plain';
-    link.setAttribute('download', "output.txt");
+    var time = new Date();
+    link.setAttribute('download', "output_" + (time.getUTCMonth() + 1) + "." + time.getUTCDate() + "_" + time.getUTCHours() + "." + time.getUTCMinutes() + "." + time.getUTCSeconds() + ".txt");
     link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(allText));
     link.click();
 }
