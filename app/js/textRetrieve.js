@@ -1,8 +1,10 @@
 function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
 
+    // This method works only when pdf is rendered with text //TODO
+    // njknjk
+
     // get the page
     var page = $("#page-" + pageNumber + " > div")[0];
-
     var textInRect = "";
 
     for (j = 0; j < page.childNodes.length; j++) {
