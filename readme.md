@@ -12,7 +12,7 @@ PdfReg is based on [Pdf.js](https://github.com/mozilla/pdf.js) with Text Layer r
 3. Create rectangles where you want.
 4. Click "Get All Text" button.
 
-![Flow](asset/info.gif)
+![Flow](asset/intro.gif)
 
 
 <!-- # Notes
