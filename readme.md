@@ -4,6 +4,7 @@ PdfReg is a javascript based web tool, which gets text at selected region of pdf
 
 PdfReg is based on [Pdf.js](https://github.com/mozilla/pdf.js) with Text Layer render option and [Interact.js](https://github.com/taye/interact.js).
 
+[>> Go to the PdfReg Web App <<](https://imesut.github.io/PdfReg/app/)
 
 # How to use?
 
