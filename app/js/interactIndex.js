@@ -1,4 +1,6 @@
-interact('.draggable')
+// Init interact
+// This script is nearly not modified or modified minimally
+interact('.draggable') // rectangle class is "draggable"
     .draggable({
         // enable inertial throwing
         inertia: true,
@@ -16,10 +18,9 @@ interact('.draggable')
         // enable autoScroll
         autoScroll: true,
         onmove: dragMoveListener,
-
     })
     .resizable({
-        // resize from all edges and corners
+        // add resize funtionality from all edges and corners
         edges: {
             left: true,
             right: true,
@@ -33,7 +34,7 @@ interact('.draggable')
             endOnly: true,
         },
 
-        // minimum size
+        // minimum size of rectangles
         restrictSize: {
             min: {
                 width: 30,
@@ -43,7 +44,7 @@ interact('.draggable')
         inertia: true,
     })
     .on('resizemove', function (event) {
-        var target = event.target, 
+        var target = event.target,
             x = (parseFloat(target.getAttribute('data-x')) || 0),
             y = (parseFloat(target.getAttribute('data-y')) || 0);
 
@@ -75,5 +76,4 @@ function dragMoveListener(event) {
     target.setAttribute('data-y', y);
 }
 
-// this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;

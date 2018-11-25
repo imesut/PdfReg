@@ -15,12 +15,8 @@ PdfReg is based on [Pdf.js](https://github.com/mozilla/pdf.js) with Text Layer r
 ![Flow](asset/intro.gif)
 
 
-<!-- # Notes
+# Notes
 
 **How to get text at a region with Pdf.js?**
 
-This gist will be helpfull
-
-**How to enable text layer render option at Pdf.js?**
-
-Check out this gist:  -->
+This gist will be helpfull [gist:getTextInRect.js](https://gist.github.com/imesut/d6d44db101b4a434064d88cfebe647eb) with text layer rendering option, check out the article about [how to enable text layering](https://www.sitepoint.com/custom-pdf-rendering/)

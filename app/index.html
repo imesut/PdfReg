@@ -29,7 +29,6 @@
     <link type="text/css" href="css/style.css" rel="stylesheet">
 
 </head>
-
 <body>
 
     <div class="container" style="margin:20px">
@@ -54,7 +53,7 @@
 
         </div>
         <div class="col-md-3 col-sm-2 sticky">
-            <!-- <div class="sticky" style="float:left"> -->
+        <!-- <div class="sticky" style="float:left"> -->
             <h2>Settings</h2>
             <div id="onPageAlert" class="alert alert-info alert-dismissible fade in" style="margin-bottom: 0; display:none">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -62,6 +61,7 @@
             </div>
             <a onclick="addRectangle()" class="btn btn-default" id="addRectBtn">Add Rectangle</a>
             <br><br>
+            <!-- showInfo method is used to display info/error on user interface -->
             <a onclick="try {getAllText()} catch(err){showInfo(err, 'danger')}" class="btn btn-default" id="getAllTextBtn">Get
                 All Text</a>
             <br><br>
@@ -70,47 +70,64 @@
         </div>
     </div>
 
+    <!-- Pdf js and worker files -->
     <script src="js/pdfInit.js"></script>
     <script type="text/javascript">
         pdfjsLib.workerSrc = "vendor/js/pdf.worker.js";
     </script>
 
     <script>
+        // This script handles dreg events and creating rectangles at dragged area
         var nRX = 0; // New Rectange's X begin
         var nRY = 0; // New Rectange's Y begin
         var nRH = 0; // New Rectange's H - Height
         var nRW = 0; // New Rectange's W - Width
-        mouseBoxStyle = $(".mouseBox")[0].style;
-        isDragging = false;
 
-        $("#holder").mousedown(
+        // mouseBox is the box displayed while holding mouse during dragging
+        mouseBoxStyle = $(".mouseBox")[0].style;
+        isDragging = false; // flag
+
+        $("#holder")
+            .mousedown( // Beginning of pressing drag event
                 function (event) {
+                    // This if check (below) stands for the feature fulfillment
+                    // If user select or resize a pre-drawn rectangle these callback
+                    // shouln't create new rectangles.
                     if (event.target.className != "draggable") {
                         isDragging = true;
+                        // Beginning points
                         nRX = parseFloat(event.offsetX);
                         nRY = parseFloat(event.offsetY);
+                        // MouseBox is started to be visible
                         mouseBoxStyle.display = "block";
                         mouseBoxStyle.left = nRX + "px";
                         mouseBoxStyle.top = nRY + "px";
                     }
                 }
             )
-            .mousemove(function (event) {
+            .mousemove( // The moment of drag event
+                function (event) {
                 if (event.target.className != "draggable" && isDragging) {
+                    // Updates mouseBox sizes while drag event
                     mouseBoxStyle.width = (event.offsetX - nRX) + "px";
                     mouseBoxStyle.height = (event.offsetY - nRY) + "px";
                 }
             })
-            .mouseup(
+            .mouseup( // End of drag event
                 function (event) {
-                    if (event.target.className != "draggable") {
+                    if (event.target.className != "draggable") { // Same control at mousedown callback
                         isDragging = false;
+                        // MouseBox disappears
                         mouseBoxStyle.display = "none";
                         mouseBoxStyle.width = mouseBoxStyle.height = 0;
+                        
                         nRW = parseFloat(event.offsetX - nRX);
                         nRH = parseFloat(event.offsetY - nRY);
-                        //console.log(nRX + "-" + nRY + "-" + nRW + "-" + nRH);
+                        // This is very helpfull console log to control box coordinates
+                            // console.log(nRX + "-" + nRY + "-" + nRW + "-" + nRH);
+                        // New box created
                         if (nRW > 0 & nRH > 0) addRectangle(nRX, nRY, nRW, nRH);
+                        // Set coordinates value to zero
                         nRX = nRY = nRH = nRW = 0;
                     }
                 }

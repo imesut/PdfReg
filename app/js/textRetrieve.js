@@ -1,25 +1,29 @@
-function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) {
+// This method works only when pdf is rendered with Text Layer
+// It compares particular text/word element coordinates with
+// the rectangle's coordinates. If text/word coordinates is in
+// the rectangle, text has got. And successing texts are similar.
+// Check out text layer rendering option at the article below.
+// https://www.sitepoint.com/custom-pdf-rendering/
 
-    // This method works only when pdf is rendered with text //TODO
-    // njknjk
-
-    // get the page
+function getTextInRect(pageNumber, Xi, Yi, Xl, Yl) { // modify pageNumber if required
+    // Get the page if page render method works like (page-1, page-2, ...)
+    // If not, modify according to 
     var page = $("#page-" + pageNumber + " > div")[0];
     var textInRect = "";
-
     for (j = 0; j < page.childNodes.length; j++) {
         // get text parts
         var textPart = page.childNodes[j];
-
         // if text parts are between the rectangle borders
         if (textPart.style.left != "" & textPart.style.top != "") {
             textPartX = parseFloat(textPart.style.left.slice(0, -2));
             textPartY = parseFloat(textPart.style.top.slice(0, -2));
+            // Get the text part
             if (textPartX > Xi & textPartX < Xl & textPartY > Yi & textPartY < Yl) {
                 textInRect = textInRect + textPart.textContent;
             }
         }
     }
+    // concatenated text
     return textInRect;
 }
 
